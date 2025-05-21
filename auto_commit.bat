@@ -1,3 +1,5 @@
+@echo off
+set msg=Auto commit %date% %time%
 git add .
-git commit -m "Auto commit"
+git commit -m "%msg%"
 git push

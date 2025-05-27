@@ -41,7 +41,7 @@ r = 0.12           # 거리 (m)
 theta0_deg = 90    # 초기 회전축 각도
 phi0_deg = 0       # 세차각 시작값
 psi0_deg = 0       # 고유회전 초기값
-nutation_amp_deg = 0 # 장동 진폭(최대)
+nutation_amp_deg = 3 # 장동 진폭(최대)
 T = 10             # 시뮬레이션 시간(초)
 n_steps = 1500     # 플롯 해상도
 

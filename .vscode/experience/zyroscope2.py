@@ -34,15 +34,15 @@ def gyro_motion_3d(I, omega_disk, M, r, theta0_deg=30, phi0_deg=0, psi0_deg=0, n
     return x, y, z, t, theta, phi
 
 # ===== 입력 =====
-I = 0.01           # 관성모멘트 (kg*m^2)
-omega_disk = 40.0   # 각속도 (rad/s)
-M = 0.25           # 무게추 (kg)
-r = 0.12           # 거리 (m)
+I = 0.012           # 관성모멘트 (kg*m^2)
+omega_disk = 200   # 각속도 (rad/s)
+M = 0.1           # 무게추 (kg)
+r = 0.17           # 거리 (m)
 theta0_deg = 90    # 초기 회전축 각도
 phi0_deg = 0       # 세차각 시작값
 psi0_deg = 0       # 고유회전 초기값
-nutation_amp_deg = 3 # 장동 진폭(최대)
-T = 10             # 시뮬레이션 시간(초)
+nutation_amp_deg = 10 # 장동 진폭(최대)
+T = 100             # 시뮬레이션 시간(초)
 n_steps = 1500     # 플롯 해상도
 
 # 궤적 계산

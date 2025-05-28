@@ -6,4 +6,4 @@ y = np.arange(-1, 1+0.5*h, h)
 X, Y = np.meshgrid(x, y)
 Nx = np.size(X); Ny = np.size(Y)
 phi = np.ones( (Nx, Ny)); phi *=0.1
-phi[0,:] = phi[ -1,:] = 
+phi[0,:] = phi[ -1,:] = 0

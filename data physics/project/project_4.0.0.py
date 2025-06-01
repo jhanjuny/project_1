@@ -32,7 +32,7 @@ for n in range(Nt):
 
 import plotly.graph_objects as go
 
-# history: (time, Nx, Ny) 형태의 리스트 또는 배열
+
 X, Y = np.meshgrid(np.linspace(0, Lx, Nx), np.linspace(0, Ly, Ny), indexing='ij')
 
 frames = [

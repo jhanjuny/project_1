@@ -6,7 +6,7 @@ alpha = 0.01
 L = 1.0
 Nx = 50
 dx = L / (Nx-1)
-T_total = 1.0
+T_total = 100.0
 dt = 0.0005
 Nt = int(T_total / dt)
 

@@ -18,17 +18,10 @@ for file_path in file_paths:
 
 
 data_3d = np.stack(layers, axis=0)
-print("data_3d shape:", data_3d.shape)
-if data_3d.ndim == 3:
-    nz, ny, nx = data_3d.shape
-elif data_3d.ndim == 2:
-    nz = 1
-    ny, nx = data_3d.shape
-    data_3d = data_3d.reshape((1, ny, nx))
-else:
-    raise ValueError("data_3d shape가 예상과 다릅니다:", data_3d.shape)
-
-
+nz, ny, nx = data_3d.shape
+x = np.arange(nx)
+y = np.arange(ny)
+z = np.arange(nz)
 
 fig = go.Figure(data=go.Volume(
     x=np.tile(x, ny * nz),

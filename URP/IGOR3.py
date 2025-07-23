@@ -1,50 +1,74 @@
 import numpy as np
 import glob
+import os
 import plotly.graph_objs as go
 
-# 1. 레이어로 사용할 RAW 파일 경로 설정 (바이너리 파일)
-file_pattern = r'C:\Users\pictu\URP_IGNOR\CPAG\CPAG0001\*.bin'
-file_paths = sorted(glob.glob(file_pattern))
+# 1. 여러 폴더 경로 패턴 설정 (예: 'data/set*')
+folder_pattern = r'C:\Users\pictu\URP_IGNOR\CPAG\CPAG0001'
+folders = sorted(glob.glob(folder_pattern))
 
-# 2. RAW 파일들을 순차적으로 읽어 2D 배열로 변환하여 리스트에 저장
-# 반드시 각 파일의 데이터 shape과 dtype을 알아야 함 (예시: float32, 128x128)
-ny, nx = 128, 128  # 파일의 실제 행/열 크기로 수정하세요
-layers = []
-for fp in file_paths:
-    data2d = np.fromfile(fp, dtype=np.float32).reshape(ny, nx)
-    layers.append(data2d)
+all_data_sets = []
+for folder in folders:
+    # 각 폴더 내의 .bin 및 .ini 파일 경로 지정
+    ini_file = os.path.join(folder, 'Spectrum_Fmap_fixed.ini')
+    bin_file = os.path.join(folder, 'Spectrum_Fmap_fixed.bin')
+    
+    # ini 파일에서 메타 데이터 읽기
+    import configparser
+    config = configparser.ConfigParser()
+    config.read(ini_file)
+    width = config.getint('spectrum', 'width')
+    height = config.getint('spectrum', 'height')
+    depth = config.getint('spectrum', 'depth')
+    byteperpoint = config.getint('spectrum', 'byteperpoint')
+    
+    # 바이너리 데이터 읽기
+    data = np.fromfile(bin_file, dtype=np.float32)
+    data = data.reshape((depth, height, width))  # (kz, ky, kx)
+    all_data_sets.append(data)
 
-# 3. 리스트를 3D 배열로 스택
-data3d = np.stack(layers, axis=0)  # shape: (nz, ny, nx)
+# 3D 스택 -> 4D 배열로 변환
+data_4d = np.stack(all_data_sets, axis=0)  # (nSets, kz, ky, kx)
 
-# 4. 좌표축 생성
-nz, ny, nx = data3d.shape
-x = np.arange(nx)
-y = np.arange(ny)
-z = np.arange(nz)
+# 축 인덱스 생성
+nsets, nz, ny, nx = data_4d.shape
 
-# 5. Plotly Volume 렌더링
-fig = go.Figure(data=go.Volume(
-    x=np.tile(x, ny * nz),
-    y=np.repeat(np.tile(y, nx), nz),
-    z=np.repeat(z, nx * ny),
-    value=data3d.flatten(),
-    isomin=data3d.min(),
-    isomax=data3d.max(),
-    opacity=0.1,
-    surface_count=20,
-    colorscale='Viridis'
-))
+# 4D 시각화를 위해 각 세트별 슬라이스를 3D plot으로 만들고 애니메이션 프레임으로 지정
+frames = []
+for i in range(nsets):
+    vol = go.Volume(
+        x=np.tile(np.arange(nx), ny * nz),
+        y=np.repeat(np.tile(np.arange(ny), nx), nz),
+        z=np.repeat(np.arange(nz), nx * ny),
+        value=data_4d[i].flatten(),
+        isomin=data_4d.min(), isomax=data_4d.max(),
+        opacity=0.1, surface_count=20,
+        colorscale='Viridis'
+    )
+    frames.append(go.Frame(data=[vol], name=f'Set{i}'))
 
-# 6. 레이아웃 설정
+# 초기 프레임
+fig = go.Figure(
+    data=[frames[0].data[0]],
+    layout=go.Layout(
+        title='4D Stacked Band Structure Animation',
+        updatemenus=[dict(
+            type='buttons',
+            buttons=[dict(label='Play',
+                          method='animate',
+                          args=[None, {'frame': {'duration': 500, 'redraw': True}}])]
+        )]
+    ),
+    frames=frames
+)
+
+# 축 레이블 설정
 fig.update_layout(
-    title='3D Stacked Band Structure from RAW Files',
     scene=dict(
         xaxis_title='kx Index',
         yaxis_title='ky Index',
-        zaxis_title='Layer (kz Index)'
+        zaxis_title='kz Index'
     )
 )
 
-# 7. 시각화 출력
 fig.show()

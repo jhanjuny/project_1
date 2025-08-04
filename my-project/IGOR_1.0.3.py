@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.io as pio
+pio.renderers.default = 'browser'
 
 
 alpha = 0.01

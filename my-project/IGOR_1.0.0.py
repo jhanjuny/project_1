@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 
-data = xr.open_dataarray(r"D:/URP/3D modeling/chunkCube_3DEk1.ibw")
+data = xr.open_dataarray(r"D:/URP/3D modeling/cpag0046_3DEk.ibw")
 
 print(data)
 

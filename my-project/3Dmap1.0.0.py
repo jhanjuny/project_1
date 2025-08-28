@@ -5,9 +5,11 @@ import pyvista as pv
 #=== data input===
 name=input('file_name [ibw]=')
 data_ibw=xr.open_dataarray(r'D:\URP\SRO/%s' %(name))
+#new_data_ibw=data_ibw
 new_data_ibw=data_ibw.rename({'Energy [eV]':'energy'})
 name = input('file_name [txt]=')
-data = np.loadtxt(r'D:\URP\SRO/%s' %(name), delimiter='\t', filling_values=np.nan)
+#data = np.genfromtxt(r'D:\URP\SRO/%s' %(name), delimiter='\t', filling_values=np.nan)
+data = np.loadtxt(r'D:\URP\SRO/%s' %(name), delimiter='\t')
 
 
 

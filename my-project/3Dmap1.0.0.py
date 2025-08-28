@@ -4,10 +4,12 @@ import pyvista as pv
 
 #=== data input===
 name=input('file_name [ibw]=')
-data_ibw=xr.open_dataarray(r'D:\URP\CPAG,CPAS\analsis data/%s' %(name))
+data_ibw=xr.open_dataarray(r'D:\URP\SRO/%s' %(name))
 new_data_ibw=data_ibw.rename({'Energy [eV]':'energy'})
 name = input('file_name [txt]=')
-data = np.loadtxt(r'D:\URP\CPAG,CPAS\analsis data/%s' %(name), delimiter='\t')
+data = np.loadtxt(r'D:\URP\SRO/%s' %(name), delimiter='\t', filling_values=np.nan)
+
+
 
 energy_vals=new_data_ibw.coords['energy'].values
 X_coords=new_data_ibw.coords['X'].values
@@ -22,7 +24,7 @@ X_delta=X_coords[1]-X_coords[0]
 Y_delta=Y_coords[1]-Y_coords[0]
 
 col=len(X_coords)
-row=len(energy_vals)
+row=len(energy_vals) 
 layer=len(Y_coords)
 split_data = np.vsplit(data, layer)
 

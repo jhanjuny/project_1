@@ -5,10 +5,10 @@ from plotly.subplots import make_subplots
 
 #===�뚯씪 �몄텧�섍린===
 name=input('file_name [ibw]=')
-data_ibw=xr.open_dataarray(r'D:\URP\CPAG,CPAS\analsis data/%s' %(name))
+data_ibw=xr.open_dataarray(r'D:\URP\SRO/%s' %(name))
 new_data_ibw=data_ibw.rename({'Energy [eV]':'energy'})
 name = input('file_name [txt]=')
-data = np.loadtxt(r'D:\URP\CPAG,CPAS\analsis data/%s' %(name), delimiter='\t')
+data = np.loadtxt(r'D:\URP\SRO/%s' %(name), delimiter='\t')
 
 
 energy_vals=new_data_ibw.coords['energy'].values
